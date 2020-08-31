@@ -7,9 +7,23 @@ namespace socialSecurityNumber
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter your social security number (YYMMDD-XXXX): ");
+            
 
-            string socialSecurityNumber = Console.ReadLine();
+            string socialSecurityNumber;
+
+            if (args.Length > 0)
+            {
+                Console.WriteLine($" You provided: {args[0]}");
+                socialSecurityNumber = Console.ReadLine();
+            }
+
+            else
+            {
+                Console.WriteLine("Please imput your social security number: ");
+                socialSecurityNumber = Console.ReadLine();
+            }
+
+            socialSecurityNumber = Console.ReadLine();
 
             string genderNumberString = socialSecurityNumber.Substring(9, 1);
 
@@ -24,6 +38,7 @@ namespace socialSecurityNumber
             else
             {
                 Console.WriteLine("Male");
+
             }
 
             string birthDateString = socialSecurityNumber.Substring(0, 6);
