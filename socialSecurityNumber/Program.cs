@@ -19,25 +19,42 @@ namespace socialSecurityNumber
             Console.Write("Please insert you social security number (YYMMDD-XXXX) ");
             string socialSecurityNumber = Console.ReadLine();
 
-            string genderNumberString = socialSecurityNumber.Substring(9, 1);
-            int gender = int.Parse(genderNumberString);
+            //Calculate gender
 
-            bool isFemale = gender % 2 == 0;
+            string correctGender = GetGender(socialSecurityNumber);
 
-            string correctGender = isFemale ? "Female" : "Male";
+            //Calculate age
 
-            string birthDateString = socialSecurityNumber.Substring(0, 6);
-            DateTime birthDate = DateTime.ParseExact(birthDateString, "yyMMdd", CultureInfo.InvariantCulture);
-            int age = DateTime.Now.Year - birthDate.Year;
+            DateTime birthDate;
+            int age;
+            CalculateAge(socialSecurityNumber, out birthDate, out age);
 
-            if (birthDate.Month > DateTime.Today.Month
-                || birthDate.Month == DateTime.Today.Month && birthDate.Day > DateTime.Now.Day)
+            //Generation
 
-                {
-                   age = age - 1; 
-                    // kan även skrivas som age--; 
-                }
+            string generation = CalculateGender(birthDate);
 
+            Console.Clear();
+
+
+            Console.WriteLine(@"Full name: " + firstName + " " + lastName + Environment.NewLine +
+                "Social security number: " + socialSecurityNumber + Environment.NewLine +
+                "Age: " + age + Environment.NewLine +
+                "Gender: " + correctGender + Environment.NewLine +
+                "Generation: " + generation);
+
+
+
+
+
+
+
+
+
+
+        }
+
+        private static string CalculateGender(DateTime birthDate)
+        {
             const int silenGenerationStart = 1925;
             const int silentGenerationEnd = 1945;
 
@@ -46,7 +63,7 @@ namespace socialSecurityNumber
 
             const int generationXStart = 1965;
             const int generationXEnd = 1979;
-            
+
             const int millenialsStart = 1980;
             const int millenialEnd = 1994;
 
@@ -79,25 +96,33 @@ namespace socialSecurityNumber
             {
                 generation = "Generation Z";
             }
-             
-            Console.Clear();
 
+            return generation;
+        }
 
-            Console.WriteLine(@"Full name: " + firstName + " " + lastName + Environment.NewLine +
-                "Social security number: " + socialSecurityNumber + Environment.NewLine +
-                "Age: " + age + Environment.NewLine +
-                "Gender: " + correctGender + Environment.NewLine +
-                "Generation: " + generation);
-                
-            
+        private static void CalculateAge(string socialSecurityNumber, out DateTime birthDate, out int age)
+        {
+            string birthDateString = socialSecurityNumber.Substring(0, 6);
+            birthDate = DateTime.ParseExact(birthDateString, "yyMMdd", CultureInfo.InvariantCulture);
+            age = DateTime.Now.Year - birthDate.Year;
+            if (birthDate.Month > DateTime.Today.Month
+                || birthDate.Month == DateTime.Today.Month && birthDate.Day > DateTime.Now.Day)
 
+            {
+                age = age - 1;
+                // kan även skrivas som age--; 
+            }
+        }
 
+        private static string GetGender(string socialSecurityNumber)
+        {
+            string genderNumberString = socialSecurityNumber.Substring(9, 1);
+            int gender = int.Parse(genderNumberString);
 
+            bool isFemale = gender % 2 == 0;
 
-
-            
-
-        
+            string correctGender = isFemale ? "Female" : "Male";
+            return correctGender;
         }
     }
 }
